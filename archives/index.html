@@ -102,7 +102,7 @@
             
               <li class="archive-list-container">
                 <a href="javascript:;">Archive</a>
-                <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a><span class="archive-list-count">1</span></li></ul>
+                <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a><span class="archive-list-count">2</span></li></ul>
               </li>
             
           
@@ -148,6 +148,56 @@
           <h1><a href="/archives/2020" class="archive-year">2020</a></h1>
         </div>
         <div class="post-list">
+    
+  
+
+    <div class="post-list-item article">
+      <h3 class="article-header">
+        <a href="/2020/06/02/ivy_ant/" >
+  Adding Apache ivy to an Ant build.xml without ivy.xml
+</a>
+
+      </h3>
+      
+
+      <div class="article-info">
+        <a href="/2020/06/02/ivy_ant/"><span class="article-date">
+  2020-06-02
+</span>
+</a>
+        
+
+        
+
+      </div>
+      <div class="article-entry">
+        
+          <ul>
+<li>No ivy.xml required</li>
+<li>Assumes ivy jar is at /my_jar_dir/ivy-2.5.0.jar</li>
+</ul>
+<ol>
+<li>add xml namespace for ivy to project element to prevent task name clashes:</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">xmlns:ivy="antlib:org.apache.ivy.ant</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">project</span> <span class="attr">xmlns:ivy</span>=<span class="string">"antlib:org.apache.ivy.ant"</span> <span class="attr">name</span>=<span class="string">"My Java App"</span> <span class="attr">default</span>=<span class="string">"compile"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><p>define the ivy tasks and point to the jar where they are stored:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">taskdef</span>  <span class="attr">uri</span>=<span class="string">"antlib:org.apache.ivy.ant"</span> <span class="attr">classpath</span>=<span class="string">"/my_jar_dir/ivy-2.5.0.jar"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Download dependencies into lib directory (inside prep task)</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">    <span class="comment">&lt;!-- Pull jars from maven, javadoc + sources go in sub dirs --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">ivy:retrieve</span> <span class="attr">pattern</span>=<span class="string">"lib/([classifier])/[artifact]-[revision](-[classifier]).[ext]"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span> <span class="attr">org</span>=<span class="string">"org.apache.httpcomponents"</span> <span class="attr">name</span>=<span class="string">"httpclient"</span> <span class="attr">rev</span>=<span class="string">"4.5.11"</span> <span class="attr">conf</span>=<span class="string">"default,javadoc,sources"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span> <span class="attr">org</span>=<span class="string">"org.jruby"</span> <span class="attr">name</span>=<span class="string">"jruby-complete"</span> <span class="attr">rev</span>=<span class="string">"9.2.9.0"</span> <span class="attr">conf</span>=<span class="string">"default,javadoc,sources"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">ivy:retrieve</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- Replace existing project.class.path if set --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">path</span> <span class="attr">id</span>=<span class="string">"project.class.path"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">fileset</span> <span class="attr">dir</span>=<span class="string">"lib"</span> <span class="attr">includes</span>=<span class="string">"*.jar"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">path</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">pathconvert</span> <span class="attr">property</span>=<span class="string">"newPath"</span> <span class="attr">refid</span>=<span class="string">"project.class.path"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">echo</span>&gt;</span> NEW CLASSPATH is $&#123;newPath&#125;<span class="tag">&lt;/<span class="name">echo</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+
+        
+      </div>
+    </div>
+
+  
+
+  
+  
     
   
 
